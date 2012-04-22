@@ -1,0 +1,25 @@
+h1 {  font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-style: normal; font-weight: bold; color: #FFFFFF; line-height: 20px; margin-right: 10px; margin-bottom: 0px; padding-bottom: 0px}
+.smTxtW {  font-family: Arial, Helvetica, sans-serif; font-size: 10px; font-style: normal; font-weight: normal; color: #F1F2F2}
+a {  color: #D84800}
+a:hover {  color: #FF9900}
+.txtNormal {  font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-weight: normal; color: #000000}
+h2 {  font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-style: normal; font-weight: bold; color: #132A61}
+h3 {  font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: italic; font-weight: bold; color: #132A61}
+.txt12bBI {  font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-style: italic; font-weight: bold; color: #132A61}
+.txt12w {  font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #D9F4D9}
+.run_table {
+    border: 0;
+    background-color: #D9F4D9;
+    padding: 4px;
+}
+.input_xxlarge {
+    width: 275px;
+}
+.lcol, .lcol label{
+    margin-right: 60px;
+}
+.form_error {
+    background: #C99;
+    font-style: italic;
+    padding: 1px;
+}

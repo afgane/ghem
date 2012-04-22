@@ -1,0 +1,231 @@
+<html>
+<head>
+<title>GCM Analog Model - A tool for global change impacts research</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/stylesheet.css" type="text/css">
+<script language="JavaScript">
+function MM_reloadPage(init) {  //reloads the window if Nav4 resized
+  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
+    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
+  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
+}
+MM_reloadPage(true);
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_findObj(n, d) { //v4.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && document.getElementById) x=document.getElementById(n); return x;
+}
+function MM_swapImage() { //v3.0
+ var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+</script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="MM_preloadImages('{{ STATIC_URL }}images/link_project2_s.gif','{{ STATIC_URL }}images/link_model2_s.gif','{{ STATIC_URL }}images/link_run2_s.gif','{{ STATIC_URL }}images/link_contact2_s.gif','{{ STATIC_URL }}images/link_home_s.gif')">
+<div id="Layer1" style="position:absolute; left:221px; top:0px; width:238px; height:133px; z-index:1">
+    <img src="{{ STATIC_URL }}images/level2_pic1.2.jpg" width="124" height="88"><img src="{{ STATIC_URL }}images/topbanner2.gif" width="15" height="9"><br>
+      <img src="{{ STATIC_URL }}images/topbanner1.gif" width="544" height="46"></div>
+<div id="Layer2" style="position:absolute; left:231px; top:113px; width:140; height:19; z-index:2">
+    <img src="{{ STATIC_URL }}images/ti_run.gif" width="182" height="19">
+</div>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" height="100%">
+  <tr>
+    <td rowspan="3" align="left" width="221" valign="top"><img src="{{ STATIC_URL }}images/level2_pic1.1.jpg" width="221" height="134"><br>
+        <img src="{{ STATIC_URL }}images/level2_pic2.1.jpg" width="221" height="171"><br>
+        <a href="the_project.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('project','','{{ STATIC_URL }}images/link_project2_s.gif',1)">
+            <img src="{{ STATIC_URL }}images/link_project2.gif" width="176" height="20" name="project" border="0"></a><br>
+        <a href="the_model.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('model','','{{ STATIC_URL }}images/link_model2_s.gif',1)">
+            <img src="{{ STATIC_URL }}images/link_model2.gif" width="164" height="23" name="model" border="0"></a><br>
+      <a href="run.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('run','','{{ STATIC_URL }}images/link_run2_s.gif',1)">
+          <img src="{{ STATIC_URL }}images/link_run2_s.gif" width="151" height="23" name="run" border="0"></a><br>
+      <a href="contact.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('contact','','{{ STATIC_URL }}images/link_contact2_s.gif',1)">
+          <img src="{{ STATIC_URL }}images/link_contact2.gif" width="136" height="23" name="contact" border="0"></a><br>
+      <a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('home','','{{ STATIC_URL }}images/link_home_s.gif',1)">
+          <img src="{{ STATIC_URL }}images/link_home.gif" width="120" height="21" name="home" border="0"></a><br/>
+      <img src="{{ STATIC_URL }}images/leftbanner1.gif" width="103" height="85"> </td>
+    <td height="134" valign="top">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" height="134">
+  <tr>
+    <td background="{{ STATIC_URL }}images/topbanner_bg.gif" align="right" valign="top"><img src="{{ STATIC_URL }}images/spacer.gif" width="1" height="17"><br>
+      <img src="{{ STATIC_URL }}images/logo1b.gif" width="412" height="33"><img src="{{ STATIC_URL }}images/spacer.gif" width="11" height="1"><br>
+      <img src="{{ STATIC_URL }}images/spacer.gif" width="1" height="15"><br>
+      <img src="{{ STATIC_URL }}images/logo2b.gif" width="357" height="24"><img src="{{ STATIC_URL }}images/spacer.gif" width="11" height="1"></td>
+  </tr></table></td></tr>
+  <tr>
+    <td align="left" valign="top"> <br>
+      <br />
+      <table width="90%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="10" rowspan="2">&nbsp;</td>
+          <td align="left" valign="top"> 
+            <h2>Predicting the likely future climate changes and global warming 
+              for a broad range of greenhouse gas emission scenarios</h2>
+            </td>
+        </tr>
+        <tr>
+          <td align="left" valign="top">
+            <p class="txtNormal">
+                This model utilises global emissions of carbon
+                into the atmosphere as its main driver.
+            </p>
+        <div class="run_table txtNormal">
+            <span class="txt12bBI">
+                Please supply your estimate, for
+                the next ten decades, of the average emission during each
+                decade in the form below
+            </span><span class="txtNormal"><i>
+                (in units of Gigatonnes of Carbon per year [GtC/yr])</i>:
+            </span>
+            <form action="/run.html" method="post">{% csrf_token %}
+            {% if form.non_field_errors|length > 0 %}
+              <div class="form_error">Form data values problem:<br/>
+                {{ form.non_field_errors }}
+              </div>
+            {% endif %}
+            <table class="txtNormal">
+                <tr>
+                    <td>
+                        {% for error in form.yr2000.errors %}
+                            <div class="form_error">{{ error }}</div>
+                        {% endfor %}
+                    </td>                    
+                    <td>{{ form.yr2000 }}</td>
+                    <td class="lcol">{{ form.yr2000.label_tag }}</td>
+                    <td></td>
+                    <td>
+                        {% for error in form.yr2050.errors %}
+                            <div class="form_error">{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                    <td>{{ form.yr2050 }}</td>
+                    <td>{{ form.yr2050.label_tag }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        {% for error in form.yr2010.errors %}
+                            <div class="form_error">{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                    <td>{{ form.yr2010 }}</td>
+                    <td>{{ form.yr2010.label_tag }}</td>
+                    <td></td>
+                    <td>
+                        {% for error in form.yr2060.errors %}
+                            <div class="form_error">{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                    <td>{{ form.yr2060 }}</td>
+                    <td>{{ form.yr2060.label_tag }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        {% for error in form.yr2020.errors %}
+                            <div class="form_error">{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                    <td>{{ form.yr2020 }}</td>
+                    <td>{{ form.yr2020.label_tag }}</td>
+                    <td></td>
+                    <td>
+                        {% for error in form.yr2070.errors %}
+                            <div class="form_error">{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                    <td>{{ form.yr2070 }}</td>
+                    <td>{{ form.yr2070.label_tag }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        {% for error in form.yr2030.errors %}
+                            <div class="form_error">{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                    <td>{{ form.yr2030 }}</td>
+                    <td>{{ form.yr2030.label_tag }}</td>
+                    <td></td>
+                    <td>
+                        {% for error in form.yr2080.errors %}
+                            <div class="form_error">{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                    <td>{{ form.yr2080 }}</td>
+                    <td>{{ form.yr2080.label_tag }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        {% for error in form.yr2040.errors %}
+                            <div class="form_error">{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                    <td>{{ form.yr2040 }}</td>
+                    <td>{{ form.yr2040.label_tag }}</td>
+                    <td></td>
+                    <td>
+                        {% for error in form.yr2090.errors %}
+                            <div class="form_error">{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                    <td>{{ form.yr2090 }}</td>
+                    <td>{{ form.yr2090.label_tag }}</td>
+                </tr>
+            </table>
+            <div class="txt12bbi">
+                <br/>Please supply your email address to which the model results should be posted:
+            </div>
+            {{ form.email }}
+            {% for error in form.email.errors %}
+                <div class="form_error">{{ error }}</div>
+            {% endfor %}
+            <div class="txtnormal" style="padding-top: 20px">
+                The results should be returned after around ten minutes.
+                The maximum allowed emission scenario within a given decade
+                is 50 GtC/yr. The default values within the form represent
+                a current best estimate of likely future emissions.
+            </div>
+            <p align=center>
+                <input type="submit" value="Submit" />
+            </p>
+            </form>
+        </div>
+            <p class="txtNormal">
+            <p class="txtNormal"><i><br>
+              <img src="{{ STATIC_URL }}images/ceh_logo_b.gif" width="200" height="44" align="left" vspace="0" hspace="0">
+              <img src="{{ STATIC_URL }}images/mo_logo_b.gif" width="54" height="44" align="left" vspace="0" hspace="0">
+              This project is a joint venture between CEH Wallingford and the Met Office.
+              For contact information, please click on the company logos.<br>
+              </i>
+          </td>
+        </tr>
+      </table>
+      </td>
+  </tr>
+  <tr>
+    <td align="right" valign="bottom" height="85">
+      <table width="428" border="0" cellspacing="0" cellpadding="0" height="85">
+        <tr>
+          <td background="{{ STATIC_URL }}images/botbanner_bg.gif" align="right" valign="bottom"> 
+            <img src="{{ STATIC_URL }}images/spacer.gif" width="5" height="1" align="right" vspace="0" hspace="0">
+            <img src="{{ STATIC_URL }}images/mo_logo.gif" width="48" height="47" align="right" vspace="0" hspace="0">
+            <img src="{{ STATIC_URL }}images/spacer.gif" width="5" height="1" align="right" vspace="0" hspace="0">
+            <img src="{{ STATIC_URL }}images/ceh_logo.gif" width="48" height="47" align="right" vspace="0" hspace="0">
+            <img src="{{ STATIC_URL }}images/spacer.gif" width="5" height="50" align="right" vspace="0" hspace="0">
+            <span class="smTxtW"><br>
+              Copyright&copy; 2001<br>
+              CEH Wallingford. All rights reserved<br>
+              Design by <a href="http://www.samui.co.uk">Samui Design &amp; Management</a></span><br>
+            <img src="{{ STATIC_URL }}images/spacer.gif" width="1" height="5"></td>
+        </tr>
+      </table></td></tr></table>
+  </body>
+</html>
