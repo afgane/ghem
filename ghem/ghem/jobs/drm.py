@@ -49,5 +49,14 @@ class DRMAAJobRunner(object):
         # Delete the job template
         self.ds.deleteJobTemplate(jt)
         
+        # Close DRMAA Session
+        self.ds.exit()
+        
         return True
+    
+    def build_command_line(self, job_wrapper):
+        """ Compose the command line that will be submitted to the DRM
+        """
+        job_wrapper.command_line = "date; hostname -i" # Sample CL
+        return job_wrapper.command_line
     
