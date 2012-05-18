@@ -14,6 +14,11 @@ cd {path}
 class DRMAAJobRunner(object):
     def __init__(self):
         self.ds = drmaa.Session()
+        try:
+            # Make sure we're starting with a clear session
+            self.ds.exit()
+        except drmaa.NoActiveSessionException:
+            pass
         self.ds.initialize()
         self.run_path = os.path.join("/tmp", "ghem")
         if not os.path.exists(self.run_path):
