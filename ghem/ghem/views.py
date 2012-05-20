@@ -2,7 +2,7 @@
 """
 import logging
 
-# from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django import forms
 from django.shortcuts import render, redirect
@@ -99,7 +99,8 @@ def run(request):
             # Store the form data into a session object
             request.session["job_form_data"] = form.cleaned_data
             if run_models(request):
-                return redirect("/thankyou.html")
+                # return redirect("/thankyou.html")
+                return HttpResponseRedirect("/thankyou.html")
             else:
                 form.non_field_errors = "Problem running the models"
     else:
