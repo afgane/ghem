@@ -22,72 +22,73 @@ class RunModelForm(forms.Form):
                 min_value=0,
                 max_value=50,
                 decimal_places=2,
-                widget=forms.TextInput(attrs={"class": textbox_size}))
+                widget=forms.TextInput(attrs={"class": textbox_size, "readonly": "readonly", 
+                    "title": "This value cannot be changed"}))
     yr2010 = forms.DecimalField(required=True,
                 label="2010 - 2019 (GtC/yr)",
                 initial="10.81",
                 min_value=0,
                 max_value=50,
                 decimal_places=2,
-                widget=forms.TextInput(attrs={"class": textbox_size}))
+                widget=forms.TextInput(attrs={"class": textbox_size, "tabindex": 1}))
     yr2020 = forms.DecimalField(required=True,
                 label="2020 - 2029 (GtC/yr)",
                 initial="12.18",
                 min_value=0,
                 max_value=50,
                 decimal_places=2,
-                widget=forms.TextInput(attrs={"class": textbox_size}))
+                widget=forms.TextInput(attrs={"class": textbox_size, "tabindex": 2}))
     yr2030 = forms.DecimalField(required=True,
                 label="2030 - 2039 (GtC/yr)",
                 initial="13.17",
                 min_value=0,
                 max_value=50,
                 decimal_places=2,
-                widget=forms.TextInput(attrs={"class": textbox_size}))
+                widget=forms.TextInput(attrs={"class": textbox_size, "tabindex": 3}))
     yr2040 = forms.DecimalField(required=True,
                 label="2040 - 2049 (GtC/yr)",
                 initial="14.10",
                 min_value=0,
                 max_value=50,
                 decimal_places=2,
-                widget=forms.TextInput(attrs={"class": textbox_size}))
+                widget=forms.TextInput(attrs={"class": textbox_size, "tabindex": 4}))
     yr2050 = forms.DecimalField(required=True,
                 label="2050 - 2059 (GtC/yr)",
                 initial="15.18",
                 min_value=0,
                 max_value=50,
                 decimal_places=2,
-                widget=forms.TextInput(attrs={"class": textbox_size}))
+                widget=forms.TextInput(attrs={"class": textbox_size, "tabindex": 5}))
     yr2060 = forms.DecimalField(required=True,
                 label="2060 - 2069 (GtC/yr)",
                 initial="16.39",
                 min_value=0,
                 max_value=50,
                 decimal_places=2,
-                widget=forms.TextInput(attrs={"class": textbox_size}))
+                widget=forms.TextInput(attrs={"class": textbox_size, "tabindex": 6}))
     yr2070 = forms.DecimalField(required=True,
                 label="2070 - 2079 (GtC/yr)",
                 initial="17.59",
                 min_value=0,
                 max_value=50,
                 decimal_places=2,
-                widget=forms.TextInput(attrs={"class": textbox_size}))
+                widget=forms.TextInput(attrs={"class": textbox_size, "tabindex": 7}))
     yr2080 = forms.DecimalField(required=True,
                 label="2080 - 2089 (GtC/yr)",
                 initial="18.79",
                 min_value=0,
                 max_value=50,
                 decimal_places=2,
-                widget=forms.TextInput(attrs={"class": textbox_size}))
+                widget=forms.TextInput(attrs={"class": textbox_size, "tabindex": 8}))
     yr2090 = forms.DecimalField(required=True,
                 label="2090 - 2099 (GtC/yr)",
                 initial="20.00",
                 min_value=0,
                 max_value=50,
                 decimal_places=2,
-                widget=forms.TextInput(attrs={"class": textbox_size}))
+                widget=forms.TextInput(attrs={"class": textbox_size, "tabindex": 9}))
     email = forms.EmailField(required=True,
-                widget=forms.TextInput(attrs={"class": 'input_xxlarge'}))
+                widget=forms.TextInput(attrs={"class": 'input_xxlarge', "tabindex": 10}))
     
 
 def run(request):
