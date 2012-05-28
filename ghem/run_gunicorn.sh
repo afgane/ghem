@@ -6,6 +6,9 @@ NUM_WORKERS=2
 # user/group to run as
 USER=ubuntu
 GROUP=ubuntu
+# The following will be put in place by CloudMan @ runtime
+export SGE_ROOT=/opt/sge
+export DRMAA_LIBRARY_PATH=/opt/sge/lib/lx24-amd64/libdrmaa.so.1.0
 # This assumes we cloned the source into the following dir
 cd /home/ubuntu/weather/ghem/ghem
 source ../../bin/activate
