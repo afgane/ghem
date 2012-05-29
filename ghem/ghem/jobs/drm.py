@@ -20,7 +20,6 @@ class DRMAAJobRunner(object):
         except drmaa.NoActiveSessionException:
             pass
         self.ds.initialize()
-        self.run_path = os.path.join("/tmp", "ghem")
         if not os.path.exists(self.run_path):
             os.mkdir(self.run_path)
     
@@ -33,10 +32,10 @@ class DRMAAJobRunner(object):
             return False
         
         # Define job attributes
-        ofile = os.path.join(self.run_path, "ghem.o")
-        efile = os.path.join(self.run_path, "ghem.e")
+        ofile = os.path.join(self.run_path, "run.out")
+        efile = os.path.join(self.run_path, "run.err")
         jt = self.ds.createJobTemplate()
-        jt.remoteCommand = os.path.join(self.run_path, "ghem.sh")
+        jt.remoteCommand = os.path.join(job_wrapper.run_path, "run.sh")
         jt.outputPath = ":{0}".format(ofile)
         jt.errorPath = ":{0}".format(efile)
         
@@ -46,7 +45,7 @@ class DRMAAJobRunner(object):
         os.chmod(jt.remoteCommand, 0750)
         
         # Submit the job
-        log.debug("Submitting file {0}".format(jt.remoteCommand))
+        log.debug("Submitting job script at {0}".format(jt.remoteCommand))
         log.debug("Job command is {0}".format(cmd_line))
         job_id = self.ds.runJob(jt)
         log.info("Job queued as {0}".format(job_id))
@@ -62,6 +61,7 @@ class DRMAAJobRunner(object):
     def build_command_line(self, job_wrapper):
         """ Compose the command line that will be submitted to the DRM
         """
-        job_wrapper.command_line = "date; hostname -i" # Sample CL
+        # job_wrapper.command_line = "date; hostname -i" # Sample CL
+        job_wrapper.command_line = "sh start.sh"
         return job_wrapper.command_line
     

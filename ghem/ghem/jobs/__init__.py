@@ -6,6 +6,7 @@ class JobWrapper(object):
         self.job_form_data = job_form_data
         self.user_email = self.job_form_data.get('email', None)
         self.command_line = None
+        self.run_path = "/var/opt/IMOGEN"
     
     def create_data_file(self, file_path='/var/opt/IMOGEN/EMITS/user.dat'):
         """
