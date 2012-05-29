@@ -20,8 +20,6 @@ class DRMAAJobRunner(object):
         except drmaa.NoActiveSessionException:
             pass
         self.ds.initialize()
-        if not os.path.exists(self.run_path):
-            os.mkdir(self.run_path)
     
     def queue_job(self, job_wrapper):
         # Prepare the job
@@ -32,14 +30,14 @@ class DRMAAJobRunner(object):
             return False
         
         # Define job attributes
-        ofile = os.path.join(self.run_path, "run.out")
-        efile = os.path.join(self.run_path, "run.err")
+        ofile = os.path.join(job_wrapper.run_path, "run.out")
+        efile = os.path.join(job_wrapper.run_path, "run.err")
         jt = self.ds.createJobTemplate()
         jt.remoteCommand = os.path.join(job_wrapper.run_path, "run.sh")
         jt.outputPath = ":{0}".format(ofile)
         jt.errorPath = ":{0}".format(efile)
         
-        script = drm_template.format(path=self.run_path, cmd=cmd_line)
+        script = drm_template.format(path=job_wrapper.run_path, cmd=cmd_line)
         with open(jt.remoteCommand, 'w') as sf:
             sf.write(script)
         os.chmod(jt.remoteCommand, 0750)

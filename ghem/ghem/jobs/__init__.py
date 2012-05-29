@@ -1,3 +1,4 @@
+import os
 import logging
 log = logging.getLogger(__name__)
 
@@ -7,6 +8,8 @@ class JobWrapper(object):
         self.user_email = self.job_form_data.get('email', None)
         self.command_line = None
         self.run_path = "/var/opt/IMOGEN"
+        if not os.path.exists(self.run_path):
+            os.mkdir(self.run_path)
     
     def create_data_file(self, file_path='/var/opt/IMOGEN/EMITS/user.dat'):
         """
