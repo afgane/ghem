@@ -13,7 +13,7 @@ export DRMAA_LIBRARY_PATH=/opt/sge/lib/lx24-amd64/libdrmaa.so.1.0
 cd /home/ubuntu/weather/ghem/ghem
 source ../../bin/activate
 test -d $LOGDIR || mkdir -p $LOGDIR
-chown $USER:$USER $LOGDIR
+chown -R $USER:$USER $LOGDIR
 exec ../../bin/gunicorn ghem.wsgi:application \
   -w $NUM_WORKERS \
   --user=$USER --group=$GROUP --log-level=debug \

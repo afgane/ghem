@@ -5,10 +5,10 @@ import logging
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django import forms
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 from ghem.jobs import JobWrapper
-# from ghem.jobs.drm import DRMAAJobRunner
+from ghem.jobs.drm import DRMAAJobRunner
 
 log = logging.getLogger(__name__)
 
@@ -96,11 +96,9 @@ def run(request):
         form = RunModelForm(request.POST)
         if form.is_valid():
             # non_field_errors = None # Flag to capture errors not resulting from form data validation
-            log.debug("Form fields are valid: {0}".format(form.cleaned_data))
             # Store the form data into a session object
             request.session["job_form_data"] = form.cleaned_data
             if run_models(request):
-                # return redirect("/thankyou.html")
                 return HttpResponseRedirect("/thankyou.html")
             else:
                 form.non_field_errors = "Problem running the models"
@@ -116,6 +114,7 @@ def run_models(request):
     """
     job_form_data = request.session['job_form_data']
     job_wrapper = JobWrapper(job_form_data)
+    job_wrapper.create_data_file()
     print job_wrapper.job_form_data
-    # jr = DRMAAJobRunner()
-    # return jr.queue_job(job_wrapper)
+    jr = DRMAAJobRunner()
+    return jr.queue_job(job_wrapper)
