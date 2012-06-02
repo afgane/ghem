@@ -10,11 +10,15 @@ GROUP=ubuntu
 export SGE_ROOT=/opt/sge
 export DRMAA_LIBRARY_PATH=/opt/sge/lib/lx24-amd64/libdrmaa.so.1.0
 # This assumes we cloned the source into the following dir
-cd /home/ubuntu/weather/ghem/ghem
-source ../../bin/activate
+cd /home/ubuntu/weather/ghem
+# Always update the code from the repo on service start
+git pull
+# Activate the virtual env and start the app as a wsgi app
+source ../bin/activate
 test -d $LOGDIR || mkdir -p $LOGDIR
+touch $LOGFILE
 chown -R $USER:$USER $LOGDIR
-exec ../../bin/gunicorn ghem.wsgi:application \
+exec ../bin/gunicorn ghem.wsgi:application \
   -w $NUM_WORKERS \
   --user=$USER --group=$GROUP --log-level=debug \
   --log-file=$LOGFILE 2>>$LOGFILE \
