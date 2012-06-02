@@ -1,4 +1,6 @@
 Django==1.4
+PyYAML==3.10
+boto==2.4.1
 drmaa==0.5
 gunicorn==0.14.3
 wsgiref==0.1.2
