@@ -1,6 +1,7 @@
 """Base views.
 """
 import logging
+import subprocess
 
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
@@ -95,7 +96,6 @@ def run(request):
     if request.method == "POST":
         form = RunModelForm(request.POST)
         if form.is_valid():
-            # non_field_errors = None # Flag to capture errors not resulting from form data validation
             # Store the form data into a session object
             request.session["job_form_data"] = form.cleaned_data
             if run_models(request):
@@ -104,17 +104,26 @@ def run(request):
                 form.non_field_errors = "Problem running the models"
     else:
         form = RunModelForm()
-    return render(request, "run.html", {"form": form}, context_instance=RequestContext(request))
+    return render(request, "run.html", {"form": form},
+        context_instance=RequestContext(request))
 
 def run_models(request):
-    """ Submit the model with the provided values for execution
-        :rtype: bool
-        :return: True if the models were successfully submitted for execution.
-                 False otherwise.
+    """ 
+    Submit the models with the provided values for execution.
+    
+    :rtype: bool
+    :return: True if the models were successfully submitted for execution.
+             False otherwise.
     """
     job_form_data = request.session['job_form_data']
     job_wrapper = JobWrapper(job_form_data)
     job_wrapper.create_data_file()
     print job_wrapper.job_form_data
+    # Must run emits to generate emis_co2.dat - this step is requried to
+    # run the models and it's a lot simpler to have it run form here than
+    # from a job manager script
+    cmd = "/var/opt/IMOGEN/EMITS/emits"
+    subprocess.call(cmd, shell=True)
+    # Now submit the models via the job manager
     jr = DRMAAJobRunner()
     return jr.queue_job(job_wrapper)

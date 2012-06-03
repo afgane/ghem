@@ -8,7 +8,7 @@ class JobWrapper(object):
         self.user_email = self.job_form_data.get('email', None)
         self.store_user_email()
         self.command_line = None
-        self.run_path = "/var/opt/IMOGEN"
+        self.run_path = "/var/opt/IMOGEN/jobs_working_dir"
         if not os.path.exists(self.run_path):
             os.mkdir(self.run_path)
     

@@ -22,7 +22,8 @@ test -d $LOGDIR || mkdir -p $LOGDIR
 test -e $LOGFILE || touch $LOGFILE
 chown -R $USER:$USER $LOGDIR
 # Start the web app as a gunicorn-managed wsgi app
-exec ../bin/gunicorn ghem.wsgi:application \
+cd ghem
+exec ../../bin/gunicorn ghem.wsgi:application \
   -w $NUM_WORKERS \
   --user=$USER --group=$GROUP --log-level=debug \
   --log-file=$LOGFILE 2>>$LOGFILE \

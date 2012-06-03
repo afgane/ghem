@@ -28,10 +28,10 @@ touch $DONE_FILE
 
 # Check if all other scripts ran. If so, generate the results
 # plot and email the plot to the user
-num_done=`ls $RUNDIR | wc -l`
+num_done=`ls $RUNDIR/*.done | wc -l`
 # There are 22 models but the above command will count '.' and '..'
 # directories so include those in the calculation
-if [ $num_done -eq 24 ]; then
+if [ $num_done -eq 22 ]; then
     echo "GCM {id} finished last; generating the plot" >> $LOG_FILE
     cd GRADSPLOT/
     ./test-ensemble.sh
