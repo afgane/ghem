@@ -73,6 +73,7 @@ gcm_dirs = [
 class DRMAAJobRunner(object):
     def __init__(self):
         self.ds = drmaa.Session()
+        self.jobs_working_dir = "/var/opt/IMOGEN/jobs_working_dir"
         try:
             # Make sure we're starting with a clear session
             self.ds.exit()
@@ -82,21 +83,21 @@ class DRMAAJobRunner(object):
     
     def queue_job(self, job_wrapper):
         # Prepare the job
-        try:
-            cmd_line = self.build_command_line(job_wrapper)
-        except Exception, e:
-            log.error("Failure preparing job: {0}".format(e))
-            return False
+        # try:
+        #     cmd_line = self.build_command_line(job_wrapper)
+        # except Exception, e:
+        #     log.error("Failure preparing job: {0}".format(e))
+        #     return False
         
         # Iterate through the gcm_dirs and submit each as a separate job
         for i, input_dir in enumerate(gcm_dirs):
             # Define job attributes
-            ofile = os.path.join(job_wrapper.run_path,
+            ofile = os.path.join(self.jobs_working_dir,
                 "run_{0}.out".format(i))
-            efile = os.path.join(job_wrapper.run_path, 
+            efile = os.path.join(self.jobs_working_dir,
                 "run_{0}.err".format(i))
             jt = self.ds.createJobTemplate()
-            jt.remoteCommand = os.path.join(job_wrapper.run_path, 
+            jt.remoteCommand = os.path.join(self.jobs_working_dir,
                 "run_{0}.sh".format(i))
             jt.outputPath = ":{0}".format(ofile)
             jt.errorPath = ":{0}".format(efile)
@@ -109,7 +110,6 @@ class DRMAAJobRunner(object):
             
             # Submit the job
             log.debug("Submitting job script at {0}".format(jt.remoteCommand))
-            # log.debug("Job command is {0}".format(cmd_line))
             job_id = self.ds.runJob(jt)
             log.info("Job queued as {0}".format(job_id))
             

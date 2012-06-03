@@ -124,6 +124,7 @@ def run_models(request):
     # from a job manager script
     cmd = "/var/opt/IMOGEN/EMITS/emits"
     subprocess.call(cmd, shell=True)
+    print "Ran {0} program".format(cmd)
     # Now submit the models via the job manager
     jr = DRMAAJobRunner()
     return jr.queue_job(job_wrapper)
