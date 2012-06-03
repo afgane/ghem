@@ -13,7 +13,7 @@ cd {run_path}
 # Use this file as a flag to indicate when this run has completed
 DONE_FILE=/tmp/imogen_run/{id}.done
 RUNDIR=$(dirname $DONE_FILE)
-LOG_FILE="$RUNDIR/{id}.log"
+LOG_FILE="{log_dir}/{id}.log"
 
 # Test if run progress dir exists or create it
 test -d $RUNDIR || mkdir -p $RUNDIR
@@ -34,11 +34,11 @@ num_done=`ls $RUNDIR/*.done | wc -l`
 if [ $num_done -eq 22 ]; then
     echo "GCM {id} finished last; generating the plot" >> $LOG_FILE
     cd GRADSPLOT/
-    ./test-ensemble.sh
+    ./test-ensemble.sh >> $LOGFILE 2>&1
     
     # Email the generated plot to the user
     echo "GCM {id} sending the email" >> $LOG_FILE
-    python /home/ubuntu/weather/ghem/ghem/send_email.py
+    python /home/ubuntu/weather/ghem/ghem/send_email.py >> $LOG_FILE
 else
     echo "GCM {id} not last; currently $num_done completed" >> $LOG_FILE
 fi
@@ -74,6 +74,8 @@ class DRMAAJobRunner(object):
     def __init__(self):
         self.ds = drmaa.Session()
         self.jobs_working_dir = "/var/opt/IMOGEN/jobs_working_dir"
+        if not os.path.exists(self.jobs_working_dir):
+            os.mkdir(self.jobs_working_dir)
         try:
             # Make sure we're starting with a clear session
             self.ds.exit()
@@ -103,7 +105,7 @@ class DRMAAJobRunner(object):
             jt.errorPath = ":{0}".format(efile)
             
             script = drm_template.format(run_path=job_wrapper.run_path,
-                id=i, input_dir=input_dir)
+                id=i, input_dir=input_dir, log_dir=self.jobs_working_dir)
             with open(jt.remoteCommand, 'w') as sf:
                 sf.write(script)
             os.chmod(jt.remoteCommand, 0750)

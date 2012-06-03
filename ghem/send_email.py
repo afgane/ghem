@@ -51,6 +51,8 @@ def get_user_email(file_path='/var/opt/IMOGEN/email.txt'):
     """
     with open(file_path, 'r') as f:
         address = str(f.read()).strip()
+    print "Retrieved user's email from file {0} as {1}"\
+        .format(file_path, address)
     return address
 
 def get_ses_creds():
@@ -102,8 +104,10 @@ ses_user, ses_pass = get_ses_creds()
 attach_file = '/var/opt/IMOGEN/GRADSPLOT/out.jpg'
 if not os.path.exists(attach_file):
     attach_file = None
+    print "Results file {0} not found. Not attaching a file to the email."\
+        .format(attach_file)
 mail(to=get_user_email(),
    subject="Your IMOGEN portal results",
-   text="Attached to this message are results of the run you submitted "
+   text="Attached to this message are the results of the run you submitted "
     "to the IMOGEN portal on the AWS cloud.",
    attach=attach_file)
