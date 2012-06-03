@@ -103,9 +103,9 @@ def get_ses_creds():
 ses_user, ses_pass = get_ses_creds()
 attach_file = '/var/opt/IMOGEN/GRADSPLOT/out.jpg'
 if not os.path.exists(attach_file):
-    attach_file = None
     print "Results file {0} not found. Not attaching a file to the email."\
         .format(attach_file)
+    attach_file = None
 mail(to=get_user_email(),
    subject="Your IMOGEN portal results",
    text="Attached to this message are the results of the run you submitted "
