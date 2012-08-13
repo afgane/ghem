@@ -16,7 +16,7 @@ git pull
 # Activate the virtual env
 source ../bin/activate
 # Update any new libs that might have been added to requirements.txt
-pip install -r requirements.txt
+pip install --upgrade -r requirements.txt
 # Setup the log file & permissions
 test -d $LOGDIR || mkdir -p $LOGDIR
 test -e $LOGFILE || touch $LOGFILE

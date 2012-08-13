@@ -1,6 +1,10 @@
 Django==1.4
-PyYAML==3.10
-boto==2.4.1
+blend-lib>=0.1
+boto>=2.5.2
 drmaa==0.5
 gunicorn==0.14.3
+mock==1.0b1
+nose==1.1.2
+requests==0.13.6
+simplejson==2.6.1
 wsgiref==0.1.2
