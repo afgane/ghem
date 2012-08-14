@@ -23,7 +23,7 @@ class RunModelForm(forms.Form):
                 min_value=0,
                 max_value=50,
                 decimal_places=2,
-                widget=forms.TextInput(attrs={"class": textbox_size, "readonly": "readonly", 
+                widget=forms.TextInput(attrs={"class": textbox_size, "readonly": "readonly",
                     "title": "This value cannot be changed"}))
     yr2010 = forms.DecimalField(required=True,
                 label="2010 - 2019 (GtC/yr)",
@@ -90,7 +90,7 @@ class RunModelForm(forms.Form):
                 widget=forms.TextInput(attrs={"class": textbox_size, "tabindex": 9}))
     email = forms.EmailField(required=True,
                 widget=forms.TextInput(attrs={"class": 'input_xxlarge', "tabindex": 10}))
-    
+
 
 def run(request):
     if request.method == "POST":
@@ -108,9 +108,9 @@ def run(request):
         context_instance=RequestContext(request))
 
 def run_models(request):
-    """ 
+    """
     Submit the models with the provided values for execution.
-    
+
     :rtype: bool
     :return: True if the models were successfully submitted for execution.
              False otherwise.
@@ -128,3 +128,4 @@ def run_models(request):
     # Now submit the models via the job manager
     jr = DRMAAJobRunner()
     return jr.queue_job(job_wrapper)
+

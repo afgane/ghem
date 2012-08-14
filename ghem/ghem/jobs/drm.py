@@ -35,7 +35,7 @@ if [ $num_done -eq 22 ]; then
     echo "GCM {id} finished last; generating the plot" >> $LOG_FILE
     cd GRADSPLOT/
     ./test-ensemble.sh >> $LOGFILE 2>&1
-    
+
     # Email the generated plot to the user
     echo "GCM {id} sending the email" >> $LOG_FILE
     python /home/ubuntu/weather/ghem/ghem/send_email.py >> $LOG_FILE
@@ -82,7 +82,7 @@ class DRMAAJobRunner(object):
         except drmaa.NoActiveSessionException:
             pass
         self.ds.initialize()
-    
+
     def queue_job(self, job_wrapper):
         # Prepare the job
         # try:
@@ -90,7 +90,7 @@ class DRMAAJobRunner(object):
         # except Exception, e:
         #     log.error("Failure preparing job: {0}".format(e))
         #     return False
-        
+
         # Iterate through the gcm_dirs and submit each as a separate job
         for i, input_dir in enumerate(gcm_dirs):
             # Define job attributes
@@ -103,30 +103,30 @@ class DRMAAJobRunner(object):
                 "run_{0}.sh".format(i))
             jt.outputPath = ":{0}".format(ofile)
             jt.errorPath = ":{0}".format(efile)
-            
+
             script = drm_template.format(run_path=job_wrapper.run_path,
                 id=i, input_dir=input_dir, log_dir=self.jobs_working_dir)
             with open(jt.remoteCommand, 'w') as sf:
                 sf.write(script)
             os.chmod(jt.remoteCommand, 0750)
-            
+
             # Submit the job
             log.debug("Submitting job script at {0}".format(jt.remoteCommand))
             job_id = self.ds.runJob(jt)
             log.info("Job queued as {0}".format(job_id))
-            
+
             # Delete the job template
             self.ds.deleteJobTemplate(jt)
-        
+
         # Close DRMAA Session
         self.ds.exit()
-        
+
         return True
-    
+
     def build_command_line(self, job_wrapper):
         """ Compose the command line that will be submitted to the DRM
         """
         # job_wrapper.command_line = "date; hostname -i" # Sample CL
         job_wrapper.command_line = "sh start.sh"
         return job_wrapper.command_line
-    
+
