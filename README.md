@@ -35,6 +35,9 @@ The location of the log file for the Django app is specified in
 
 All of the models to be run are stored in ``/var/opt/IMOGEN/``
 
+The job manager (*i.e.,* SGE) scripts are stored in
+``[DRMAAJobRunner.jobs_working_dir]/run_##.sh``, which defaults to ``/var/opt/IMOGEN/jobs_working_dir``. The stdout/err for those scripts is stored in the same directory with names matching the submission script and ``.out``/``.err`` extensions.
+
 The locations of CloudMan log files, which is used to orchestrate the setup of the system, are in the the following locations:
 
 1. /opt/cloudman/pkg/ec2autorun.log
