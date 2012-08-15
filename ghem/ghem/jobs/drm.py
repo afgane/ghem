@@ -16,14 +16,17 @@ RUNDIR=$(dirname $DONE_FILE)
 LOG_FILE="{log_dir}/{id}.log"
 
 # Initialize CloudMan and setup cluster size
-echo "GCM {id} initializing CloudMan" >> $LOG_FILE
+# Activate the virtual env first
+source /home/ubuntu/weather/bin/activate
+echo "GCM {id} initializing CloudMan" > $LOG_FILE
 python /home/ubuntu/weather/ghem/ghem/init_cm.py >> $LOG_FILE
+deactivate
 
 # Test if run progress dir exists or create it
 test -d $RUNDIR || mkdir -p $RUNDIR
 
 # Invoke the model code w/ the appropriate input file
-echo "GCM {id} starting at `date`" > $LOG_FILE
+echo "GCM {id} starting at `date`" >> $LOG_FILE
 ./jules_fast.exe < 22GCM/{input_dir}/input.jin
 
 # Create a file indicating the model ran

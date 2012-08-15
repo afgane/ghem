@@ -18,6 +18,7 @@ except Exception, e:
     print "Error reading user data file {0}: {1}".format(ud_file, e)
     sys.exit(1)
 # Do the work only if we're running on the master instance
+# FIXME: more than 1 job can end up on master - need another method!
 if role == 'master':
     # Initialize CloudMan now
     cm = CloudMan('http://127.0.0.1:42284/', cm_pwd)
