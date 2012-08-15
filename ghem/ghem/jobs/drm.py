@@ -15,6 +15,10 @@ DONE_FILE=/tmp/imogen_run/{id}.done
 RUNDIR=$(dirname $DONE_FILE)
 LOG_FILE="{log_dir}/{id}.log"
 
+# Initialize CloudMan and setup cluster size
+echo "GCM {id} initializing CloudMan" >> $LOG_FILE
+python /home/ubuntu/weather/ghem/ghem/init_cm.py >> $LOG_FILE
+
 # Test if run progress dir exists or create it
 test -d $RUNDIR || mkdir -p $RUNDIR
 
