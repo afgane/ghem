@@ -6,6 +6,15 @@ import sys
 import yaml
 from blend.cloudman import CloudMan
 
+# Setup logging
+import logging
+log = logging.getLogger('init_cm')
+hdlr = logging.FileHandler('/tmp/init_cm.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+hdlr.setFormatter(formatter)
+log.addHandler(hdlr)
+log.setLevel(logging.DEBUG)
+
 # Get CloudMan password from the user data file
 ud = {}
 try:
@@ -15,14 +24,14 @@ try:
     role = ud.get('role', 'master')
     cm_pwd = ud.get('password', '')
 except Exception, e:
-    print "Error reading user data file {0}: {1}".format(ud_file, e)
+    log.error("Error reading user data file {0}: {1}".format(ud_file, e))
     sys.exit(1)
 # Do the work only if we're running on the master instance
 # FIXME: more than 1 job can end up on master - need another method!
 if role == 'master':
     # Initialize CloudMan now
     cm = CloudMan('http://127.0.0.1:42284/', cm_pwd)
-    print "Initializing CloudMan to type SGE"
+    log.debug("Initializing CloudMan to type SGE")
     cm.initialize(type='SGE')
-    print "Scaling the size of CloudMan cluster"
+    log.debug("Scaling the size of CloudMan cluster")
     # TODO: Add enough nodes to enable the 22 models to run in parallel

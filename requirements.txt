@@ -1,4 +1,5 @@
 Django==1.4
+PyYAML==3.10
 blend-lib>=0.1
 boto>=2.5.2
 drmaa==0.5

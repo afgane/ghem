@@ -19,7 +19,7 @@ LOG_FILE="{log_dir}/{id}.log"
 # Activate the virtual env first
 source /home/ubuntu/weather/bin/activate
 echo "GCM {id} initializing CloudMan" > $LOG_FILE
-python /home/ubuntu/weather/ghem/ghem/init_cm.py >> $LOG_FILE
+python /home/ubuntu/weather/ghem/ghem/init_cm.py
 deactivate
 
 # Test if run progress dir exists or create it
