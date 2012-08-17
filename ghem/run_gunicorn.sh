@@ -9,6 +9,8 @@ GROUP=ubuntu
 # The following will be put in place by CloudMan @ runtime
 export SGE_ROOT=/opt/sge
 export DRMAA_LIBRARY_PATH=/opt/sge/lib/lx24-amd64/libdrmaa.so.1.0
+# Install blend-lib used to manipulate CloudMan via API
+sudo pip install blend-lib
 # This assumes we cloned the source into the following dir
 cd /home/ubuntu/weather/ghem
 # Always update the code from the repo on service start

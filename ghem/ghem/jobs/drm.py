@@ -16,11 +16,8 @@ RUNDIR=$(dirname $DONE_FILE)
 LOG_FILE="{log_dir}/{id}.log"
 
 # Initialize CloudMan and setup cluster size
-# Activate the virtual env first
-source /home/ubuntu/weather/bin/activate
 echo "GCM {id} initializing CloudMan" > $LOG_FILE
 python /home/ubuntu/weather/ghem/ghem/init_cm.py
-deactivate
 
 # Test if run progress dir exists or create it
 test -d $RUNDIR || mkdir -p $RUNDIR
@@ -46,6 +43,9 @@ if [ $num_done -eq 22 ]; then
     # Email the generated plot to the user
     echo "GCM {id} sending the email" >> $LOG_FILE
     python /home/ubuntu/weather/ghem/ghem/send_email.py >> $LOG_FILE
+
+    # Terminate the cluster
+    # TODO python /home/ubuntu/weather/ghem/ghem/terminate_cm.py
 else
     echo "GCM {id} not last; currently $num_done completed" >> $LOG_FILE
 fi

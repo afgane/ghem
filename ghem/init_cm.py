@@ -26,12 +26,14 @@ try:
 except Exception, e:
     log.error("Error reading user data file {0}: {1}".format(ud_file, e))
     sys.exit(1)
-# Do the work only if we're running on the master instance
-# FIXME: more than 1 job can end up on master - need another method!
-if role == 'master':
-    # Initialize CloudMan now
-    cm = CloudMan('http://127.0.0.1:42284/', cm_pwd)
+# Initialize CloudMan if not already initialized
+cm = CloudMan('http://127.0.0.1:42284/', cm_pwd)
+cm_type = cm.get_cluster_type()
+log.debug("CloudMan type: '{0}'".format(cm_type))
+if cm_type == '':
     log.debug("Initializing CloudMan to type SGE")
     cm.initialize(type='SGE')
     log.debug("Scaling the size of CloudMan cluster")
-    # TODO: Add enough nodes to enable the 22 models to run in parallel
+    # Enable autoscaling with sufficient cluster size limits to enable the
+    # 22 models to run in parallel (assuming Large instance types w/ 4 CPUs)
+    #cm.enable_autoscaling(0, 7)
