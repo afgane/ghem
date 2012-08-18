@@ -4,13 +4,15 @@ import drmaa
 import logging
 log = logging.getLogger(__name__)
 
-# TODO: Add email option and configure the system to send the email
 drm_template = """#!/bin/sh
 #$ -S /bin/sh
 
 cd {run_path}
 
 # Use this file as a flag to indicate when this run has completed
+#FIXME: .done directory must be shared over NFS so all workers are accounted for
+# w/o a data dir, this must be /opt/sge then but that's owned by root - all
+# this runs as ubuntu...
 DONE_FILE=/tmp/imogen_run/{id}.done
 RUNDIR=$(dirname $DONE_FILE)
 LOG_FILE="{log_dir}/{id}.log"
@@ -18,7 +20,7 @@ LOG_FILE="{log_dir}/{id}.log"
 # Make sure blend-lib is installed
 python -c "from blend.cloudman import CloudMan" || sudo pip install blend-lib
 # Initialize CloudMan and setup cluster size
-echo "GCM {id} initializing CloudMan" > $LOG_FILE
+echo "GCM {id} calling init_cm.py script (check '/tmp/log/gunicorn/manipulate_cm.log)" > $LOG_FILE
 python /home/ubuntu/weather/ghem/ghem/init_cm.py
 
 # Test if run progress dir exists or create it
@@ -32,11 +34,9 @@ echo "GCM {id} starting at `date`" >> $LOG_FILE
 echo "GCM {id} completed at `date`" >> $LOG_FILE
 touch $DONE_FILE
 
-# Check if all other scripts ran. If so, generate the results
+# Check if all the other scripts ran. If so, generate the results
 # plot and email the plot to the user
 num_done=`ls $RUNDIR/*.done | wc -l`
-# There are 22 models but the above command will count '.' and '..'
-# directories so include those in the calculation
 if [ $num_done -eq 22 ]; then
     echo "GCM {id} finished last; generating the plot" >> $LOG_FILE
     cd GRADSPLOT/
@@ -47,7 +47,8 @@ if [ $num_done -eq 22 ]; then
     python /home/ubuntu/weather/ghem/ghem/send_email.py >> $LOG_FILE
 
     # Terminate the cluster
-    # TODO python /home/ubuntu/weather/ghem/ghem/terminate_cm.py
+    echo "GCM {id} initiating termination of this cluster" >> $LOG_FILE
+    # python /home/ubuntu/weather/ghem/ghem/terminate_cm.py
 else
     echo "GCM {id} not last; currently $num_done completed" >> $LOG_FILE
 fi

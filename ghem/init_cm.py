@@ -9,7 +9,7 @@ from blend.cloudman import CloudMan
 # Setup logging
 import logging
 log = logging.getLogger('init_cm')
-hdlr = logging.FileHandler('/tmp/init_cm.log')
+hdlr = logging.FileHandler('/tmp/log/gunicorn/manipulate_cm.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 log.addHandler(hdlr)
@@ -29,11 +29,13 @@ except Exception, e:
 # Initialize CloudMan if not already initialized
 cm = CloudMan('http://127.0.0.1:42284/', cm_pwd)
 cm_type = cm.get_cluster_type()
-log.debug("CloudMan type: '{0}'".format(cm_type))
+log.debug("\nCurrent CloudMan type: '{0}'".format(cm_type))
 if cm_type == '':
-    log.debug("Initializing CloudMan to type SGE")
+    log.debug("Initializing CloudMan to type 'SGE'")
     cm.initialize(type='SGE')
     log.debug("Scaling the size of CloudMan cluster")
     # Enable autoscaling with sufficient cluster size limits to enable the
     # 22 models to run in parallel (assuming Large instance types w/ 4 CPUs)
-    #cm.enable_autoscaling(0, 7)
+    cm.enable_autoscaling(0, 7)
+else:
+    log.debug("CloudMan already setup; didn't do anything.")
