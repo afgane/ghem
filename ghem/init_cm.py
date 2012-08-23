@@ -30,7 +30,7 @@ except Exception, e:
 cm = CloudMan('http://127.0.0.1:42284/', cm_pwd)
 cm_type = cm.get_cluster_type()
 log.debug("\nCurrent CloudMan type: '{0}'".format(cm_type))
-if cm_type == '':
+if cm_type == '' or cm_type is None:
     log.debug("Initializing CloudMan to type 'SGE'")
     cm.initialize(type='SGE')
     log.debug("Scaling the size of CloudMan cluster")

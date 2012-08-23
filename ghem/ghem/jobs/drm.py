@@ -20,7 +20,7 @@ LOG_FILE="{log_dir}/{id}.log"
 # Make sure blend-lib is installed
 python -c "from blend.cloudman import CloudMan" || sudo pip install blend-lib
 # Initialize CloudMan and setup cluster size
-echo "GCM {id} calling init_cm.py script (check '/tmp/log/gunicorn/manipulate_cm.log)" > $LOG_FILE
+echo "GCM {id} calling init_cm.py script (check /tmp/log/gunicorn/manipulate_cm.log)" > $LOG_FILE
 python /home/ubuntu/weather/ghem/ghem/init_cm.py
 
 
