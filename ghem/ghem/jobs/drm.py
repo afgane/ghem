@@ -20,7 +20,7 @@ LOG_FILE="{log_dir}/{id}.log"
 # Make sure blend-lib is installed
 python -c "from blend.cloudman import CloudMan" || sudo pip install blend-lib
 # Initialize CloudMan and setup cluster size
-echo "GCM {id} calling init_cm.py script (check /tmp/log/gunicorn/manipulate_cm.log)" > $LOG_FILE
+echo "GCM {id} calling init_cm.py script (check /mnt/transient_nfs/ghem/manipulate_cm.log)" > $LOG_FILE
 python /home/ubuntu/weather/ghem/ghem/init_cm.py
 
 
@@ -93,7 +93,7 @@ gcm_dirs = [
 class DRMAAJobRunner(object):
     def __init__(self):
         self.ds = drmaa.Session()
-        self.jobs_working_dir = "/var/opt/IMOGEN/jobs_working_dir"
+        self.jobs_working_dir = "/mnt/transient_nfs/ghem/jobs_working_dir"
         if not os.path.exists(self.jobs_working_dir):
             os.mkdir(self.jobs_working_dir)
         try:

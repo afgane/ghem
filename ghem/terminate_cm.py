@@ -10,7 +10,7 @@ from blend.cloudman import CloudMan
 # Setup logging
 import logging
 log = logging.getLogger('terminate_cm')
-hdlr = logging.FileHandler('/tmp/log/gunicorn/manipulate_cm.log')
+hdlr = logging.FileHandler('/mnt/transient_nfs/ghem/manipulate_cm.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 log.addHandler(hdlr)

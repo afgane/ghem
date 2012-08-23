@@ -14,7 +14,9 @@ build a local virtualenv, install the dependencies and start the server:
 ### Production deployment
 
 To deploy this app on an machine (e.g., cloud image), have it run behind a
-web proxy (*e.g.,* [nginx][3]), and start at machine boot, do the following steps. By default, scripts included in the repository assume the code is cloned to (*i.e.,* the project root directory is) ``/home/ubuntu/weather``
+web proxy (*e.g.,* [nginx][3]), and start at machine boot, do the following steps.
+By default, scripts included in the repository assume the code is cloned to
+(*i.e.,* the project root directory is) ``/home/ubuntu/weather``.
 
 1. Do all of the above above steps excluding starting the development server
 1. Place ``nginx.conf`` in ``?/nginx/conf/.`` directory
@@ -36,9 +38,13 @@ The location of the log file for the Django app is specified in
 All of the models to be run are stored in ``/var/opt/IMOGEN/``
 
 The job manager (*i.e.,* SGE) scripts are stored in
-``[DRMAAJobRunner.jobs_working_dir]/run_##.sh``, which defaults to ``/var/opt/IMOGEN/jobs_working_dir``. The stdout/err for those scripts is stored in the same directory with names matching the submission script and ``.out``/``.err`` extensions.
+``[DRMAAJobRunner.jobs_working_dir]/run_##.sh``, which defaults to
+``/mnt/transient_nfs/ghem/jobs_working_dir``. The stdout/err for those scripts
+is stored in the same directory with names matching the submission script and
+``.out``/``.err`` extensions.
 
-The locations of CloudMan log files, which is used to orchestrate the setup of the system, are in the the following locations:
+The locations of CloudMan log files, which is used to orchestrate the setup of
+the system, are in the the following locations:
 
 1. /opt/cloudman/pkg/ec2autorun.log
 1. /tmp/cm/cm_boot.log
