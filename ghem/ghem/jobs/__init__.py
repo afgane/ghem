@@ -1,4 +1,5 @@
 import os
+import errno
 import shutil
 import logging
 log = logging.getLogger(__name__)
@@ -36,6 +37,15 @@ class JobWrapper(object):
         """
         Store the email address provided by the user to a text file.
         """
+        dirname = os.path.dirname(file_path)
+        try:
+            os.makedirs(dirname)
+        except OSError as ex:
+            if ex.errno == errno.EEXIST:
+                pass
+            else:
+                log.error("Cannot create directory for email {0}: {1}"\
+                        .format(dirname, ex))
         with open(file_path, 'w') as f:
             f.write(self.user_email)
 
