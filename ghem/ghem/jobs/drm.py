@@ -13,7 +13,7 @@ cd {run_path}
 #FIXME: .done directory must be shared over NFS so all workers are accounted for
 # w/o a data dir, this must be /opt/sge then but that's owned by root - all
 # this runs as ubuntu...
-DONE_FILE=/tmp/imogen_run/{id}.done
+DONE_FILE=/mnt/transient_nfs/ghem/jobs/{id}.done
 RUNDIR=$(dirname $DONE_FILE)
 LOG_FILE="{log_dir}/{id}.log"
 
@@ -22,6 +22,16 @@ python -c "from blend.cloudman import CloudMan" || sudo pip install blend-lib
 # Initialize CloudMan and setup cluster size
 echo "GCM {id} calling init_cm.py script (check '/tmp/log/gunicorn/manipulate_cm.log)" > $LOG_FILE
 python /home/ubuntu/weather/ghem/ghem/init_cm.py
+
+
+# Copy the input data file from NFS to the location where the models expect the
+# file. The paths used below must match those in the ``create_data_file`` method.
+if [ -f /mnt/transient_nfs/ghem/user.dat ]
+then
+    cp /mnt/transient_nfs/ghem/user.dat /var/opt/IMOGEN/EMITS/user.dat
+else
+    echo "Input file /mnt/transient_nfs/ghem/user.dat not found!" >> $LOG_FILE
+fi
 
 # Test if run progress dir exists or create it
 test -d $RUNDIR || mkdir -p $RUNDIR

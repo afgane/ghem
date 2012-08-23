@@ -20,13 +20,13 @@ def mail(to, subject, text, attach=None):
    Compose and send an email using smtplib via AWS SES
    """
    msg = MIMEMultipart()
-   
+
    msg['From'] = from_email
    msg['To'] = to
    msg['Subject'] = subject
-   
+
    msg.attach(MIMEText(text))
-   
+
    if attach is not None:
        part = MIMEBase('application', 'octet-stream')
        part.set_payload(open(attach, 'rb').read())
@@ -34,7 +34,7 @@ def mail(to, subject, text, attach=None):
        part.add_header('Content-Disposition',
                'attachment; filename="%s"' % os.path.basename(attach))
        msg.attach(part)
-   
+
    mailServer = smtplib.SMTP("email-smtp.us-east-1.amazonaws.com", 587)
    mailServer.ehlo()
    mailServer.starttls()
@@ -44,7 +44,7 @@ def mail(to, subject, text, attach=None):
    # Should be mailServer.quit(), but that crashes...
    mailServer.close()
 
-def get_user_email(file_path='/var/opt/IMOGEN/email.txt'):
+def get_user_email(file_path='/mnt/transient_nfs/ghem/email.txt'):
     """
     Read the file where user's email was saved by the ghem web app JobWrapper
     class - the path provided must match the path used by JobWrapper!
@@ -72,11 +72,11 @@ def get_ses_creds():
         cm_ud = yaml.load(f)
     aws_access_key = cm_ud.get('access_key', None)
     aws_secret_key = cm_ud.get('secret_key', None)
-    
+
     # Get the creds file from the S3 bucket
     bucket_name = 'imogen-dev'
     remote_filename = 'ses_creds.yaml'
-    local_file = '/tmp/ses_creds.yaml'
+    local_file = '/mnt/transient_nfs/ghem/ses_creds.yaml'
     if aws_access_key is None or aws_secret_key is None:
         print "Could not retrieve credentials from CloudMan's user data. " \
               "Cannot retrieve SES credentials from S3 bucket; not continuing."
@@ -92,7 +92,7 @@ def get_ses_creds():
         print("Failed to get file '%s' from bucket '%s': %s" \
               % (remote_filename, bucket_name, e))
         return None
-    
+
     # Extract the creds from the file
     with open(local_file, 'r') as f:
         creds = yaml.load(f)
@@ -111,3 +111,4 @@ mail(to=get_user_email(),
    text="Attached to this message are the results of the run you submitted "
     "to the IMOGEN portal on the AWS cloud.",
    attach=attach_file)
+
