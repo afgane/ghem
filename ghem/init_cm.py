@@ -4,6 +4,7 @@ Connect to and initialize the instance of CloudMan running on this instance
 import os
 import sys
 import yaml
+import subprocess
 from blend.cloudman import CloudMan
 
 # Setup logging
@@ -40,8 +41,17 @@ if role == 'master':
         log.debug("Scaling the size of CloudMan cluster")
         # Enable autoscaling with sufficient cluster size limits to enable the
         # 22 models to run in parallel
-        # TODO: examine the size of the instance and adjust AS appropriately
-        cm.enable_autoscaling(0, 7)
+        # Get the number of cores on this machine to set autoscaling appropriately
+        process = subprocess.Popen(['grep', '-c', 'processor', '/proc/cpuinfo'],
+                stdout=subprocess.PIPE)
+        out, err = process.communicate()
+        try:
+            cm.enable_autoscaling(0, int(out.strip()))
+        except Exception:
+            # Default to large instance type w/ 4 cores per worker
+            log.error("Had trouble getting the number of cores on this instance. "\
+                "Assuming Large instance type and setting auto-scaling limits to 0-6")
+            cm.enable_autoscaling(0, 6)
     else:
         log.debug("CloudMan already setup; didn't do anything.")
 else:
