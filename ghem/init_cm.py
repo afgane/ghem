@@ -50,8 +50,9 @@ if role == 'master':
                 stdout=subprocess.PIPE)
         out, err = process.communicate()
         try:
-            # We need an integer big enough to accomodate running all 22 models in parallel
-            as_max = int(math.ceil(22.0/int(out.strip())))
+            # We need an integer big enough to accomodate running all 22 models
+            # in parallel; however, CloudMan allows max 19 workers so limit there.
+            as_max = min(19, int(math.ceil(22.0/int(out.strip()))))
             log.debug("[{0}] Setting CloudMan auto-scaling limits to 0 and {1}".format(ip, as_max))
             cm.enable_autoscaling(0, as_max)
         except Exception:
