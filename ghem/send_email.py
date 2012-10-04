@@ -15,7 +15,7 @@ ses_pass = ""
 # This email address must be verified from AWS SES
 from_email = "afgane@gmail.com"
 
-def mail(to, subject, text, attach=None):
+def mail(to, subject, text, attach_files=None):
    """
    Compose and send an email using smtplib via AWS SES
    """
@@ -27,13 +27,17 @@ def mail(to, subject, text, attach=None):
 
    msg.attach(MIMEText(text))
 
-   if attach is not None:
-       part = MIMEBase('application', 'octet-stream')
-       part.set_payload(open(attach, 'rb').read())
-       Encoders.encode_base64(part)
-       part.add_header('Content-Disposition',
-               'attachment; filename="%s"' % os.path.basename(attach))
-       msg.attach(part)
+   for af in attach_files:
+       try:
+           with open(af, 'r') as f:
+               part = MIMEBase('application', 'octet-stream')
+               part.set_payload(f.read())
+               Encoders.encode_base64(part)
+               part.add_header('Content-Disposition',
+                       'attachment; filename="%s"' % os.path.basename(af))
+               msg.attach(part)
+       except IOError:
+           print "Error: can't open file {0}".format(af)
 
    mailServer = smtplib.SMTP("email-smtp.us-east-1.amazonaws.com", 587)
    mailServer.ehlo()
@@ -101,14 +105,20 @@ def get_ses_creds():
     return ses_user, ses_pass
 
 ses_user, ses_pass = get_ses_creds()
-attach_file = '/var/opt/IMOGEN/GRADSPLOT/out.jpg'
-if not os.path.exists(attach_file):
-    print "Results file {0} not found. Not attaching a file to the email."\
-        .format(attach_file)
-    attach_file = None
+attach_files = ['/mnt/transient_nfs/ghem/out1.jpg',
+                '/mnt/transient_nfs/ghem/out2.jpg',
+                '/mnt/transient_nfs/ghem/out3.jpg',
+                '/mnt/transient_nfs/ghem/out4.jpg',
+                '/mnt/transient_nfs/ghem/out5.jpg',
+                '/mnt/transient_nfs/ghem/out6.jpg']
+for af in attach_files:
+    if not os.path.exists(af):
+        print "Results file {0} not found. Not attaching the file to the email."\
+            .format(af)
+        attach_files.remove(af)
 mail(to=get_user_email(),
    subject="Your IMOGEN portal results",
    text="Attached to this message are the results of the run you submitted "
     "to the IMOGEN portal on the AWS cloud.",
-   attach=attach_file)
+   attach_files=attach_files)
 
