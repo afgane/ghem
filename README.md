@@ -30,6 +30,7 @@ By default, scripts included in the repository assume the code is cloned to
 
 The default location for the source of the Django app is 
 ``/home/ubuntu/weather``. The app starts up via an Upstart job
+``service ghem_upstart status|start|stop|restart``
 and runs ``run_gunicorn.sh`` from the source repo.
 
 The location of the log file for the Django app is specified in
