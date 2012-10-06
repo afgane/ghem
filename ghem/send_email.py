@@ -105,12 +105,12 @@ def get_ses_creds():
     return ses_user, ses_pass
 
 ses_user, ses_pass = get_ses_creds()
-attach_files = ['/mnt/transient_nfs/ghem/out1.jpg',
-                '/mnt/transient_nfs/ghem/out2.jpg',
-                '/mnt/transient_nfs/ghem/out3.jpg',
-                '/mnt/transient_nfs/ghem/out4.jpg',
-                '/mnt/transient_nfs/ghem/out5.jpg',
-                '/mnt/transient_nfs/ghem/out6.jpg']
+attach_files = ['/mnt/transient_nfs/ghem/csoil-2000.png',
+                '/mnt/transient_nfs/ghem/csoil-2050.png',
+                '/mnt/transient_nfs/ghem/csoil-2099.png',
+                '/mnt/transient_nfs/ghem/npp-2000.png',
+                '/mnt/transient_nfs/ghem/npp-2050.png',
+                '/mnt/transient_nfs/ghem/npp-2099.png']
 for af in attach_files:
     if not os.path.exists(af):
         print "Results file {0} not found. Not attaching the file to the email."\
