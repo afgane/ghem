@@ -181,7 +181,10 @@ function MM_swapImage() { //v3.0
                 </tr>
             </table>
             <div class="txt12bbi">
-                <br/>Please supply your email address to which the model results should be posted:
+                <br/>Please supply your email address to which the model results should be posted.
+                Multiple email addresses may be provided, separate those addresses with a comma and
+                ensure there are no spaces between the email, the comma, and the other email (e.g.,
+                me@example.edu,collaborator@example.edu):
             </div>
             {{ form.email }}
             {% for error in form.email.errors %}

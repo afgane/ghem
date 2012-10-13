@@ -23,6 +23,7 @@ def mail(to, subject, text, attach_files=None):
 
    msg['From'] = from_email
    msg['To'] = to
+   recepients = to.split(',') # Allow multiple emails to be sent
    msg['Subject'] = subject
 
    msg.attach(MIMEText(text))
@@ -44,7 +45,7 @@ def mail(to, subject, text, attach_files=None):
    mailServer.starttls()
    mailServer.ehlo()
    mailServer.login(ses_user, ses_pass)
-   mailServer.sendmail(from_email, to, msg.as_string())
+   mailServer.sendmail(from_email, recepients, msg.as_string())
    # Should be mailServer.quit(), but that crashes...
    mailServer.close()
 
