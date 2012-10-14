@@ -88,7 +88,7 @@ class RunModelForm(forms.Form):
                 max_value=50,
                 decimal_places=2,
                 widget=forms.TextInput(attrs={"class": textbox_size, "tabindex": 9}))
-    email = forms.EmailField(required=True,
+    email = forms.CharField(required=True,
                 widget=forms.TextInput(attrs={"class": 'input_xxlarge', "tabindex": 10}))
 
 
