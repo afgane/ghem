@@ -1,6 +1,11 @@
 """Base views.
 """
+import os
+import boto
+import yaml
+import hashlib
 import logging
+import tarfile
 import subprocess
 
 from django.http import HttpResponseRedirect
@@ -117,15 +122,80 @@ def run_models(request):
     """
     job_form_data = request.session['job_form_data']
     job_wrapper = JobWrapper(job_form_data)
-    job_wrapper.create_data_file()
-    print job_wrapper.job_form_data
-    # Must run emits to generate emis_co2.dat - this step is requried to
-    # run the models and it's a lot simpler to have it run form here than
-    # from a job manager script
-    cmd = "/var/opt/IMOGEN/EMITS/emits"
-    subprocess.call(cmd, shell=True)
-    print "Ran {0} program".format(cmd)
-    # Now submit the models via the job manager
-    jr = DRMAAJobRunner()
-    return jr.queue_job(job_wrapper)
+    if _already_have_results(job_wrapper.data_values):
+        # Send the results email
+        cmd = 'python /home/ubuntu/weather/ghem/ghem/send_email.py'
+        subprocess.call(cmd, shell=True)
+        # Terminate the cluster now (do this elsewhere?)
+        cmd = 'python /home/ubuntu/weather/ghem/ghem/terminate_cm.py'
+        print "Terminating this cluster"
+        #subprocess.call(cmd, shell=True) # TODO: Comment during dev only
+        return True
+    else:
+        # Create and subit jobs to compute the results
+        job_wrapper.create_data_file()
+        print job_wrapper.job_form_data
+        # Must run emits to generate emis_co2.dat - this step is requried to
+        # run the models and it's a lot simpler to have it run form here than
+        # from a job manager script
+        cmd = "/var/opt/IMOGEN/EMITS/emits"
+        subprocess.call(cmd, shell=True)
+        print "Ran {0} program".format(cmd)
+        # Now submit the models via the job manager
+        jr = DRMAAJobRunner()
+        return jr.queue_job(job_wrapper)
+
+def _already_have_results(input_data_values, results_dir='/mnt/transient_nfs/ghem'):
+    """
+    Check if the resulting plot for the provided input data values have already
+    been computed and ther results are stored in an external repository. If the
+    results already exist, download those and make them available in local
+    directory ``results_dir`` and return ``True``. If results are not found,
+    return ``False``.
+
+    This method assumess existence of an S3 bucket that contains previously
+    computed results. The name of this bucket it set in this method. Another
+    assumption is that the owner of this is the same user as the one that started
+    this instance (and because the general assumption for this app is that it's
+    running atop CloudMan platform, the access keys for the bucket are obtained
+    from CloudMan's user data).
+    """
+    try:
+        data_values_string = '_'.join(input_data_values)
+        results_hash = hashlib.md5(data_values_string).hexdigest()
+        results_file_name = results_hash + '.tar.gz'
+
+        # Get S3 bucket creds from CloudMan's user data
+        cm_ud = {}
+        ud_file = '/tmp/cm/userData.yaml'
+        with open(ud_file) as f:
+            cm_ud = yaml.load(f)
+        aws_access_key = cm_ud.get('access_key', None)
+        aws_secret_key = cm_ud.get('secret_key', None)
+
+        # Check if the key (ie, file) matching the results already exist
+        s3_conn = boto.connect_s3(aws_access_key, aws_secret_key)
+        bucket_name = 'imogen-dev'
+        bucket = s3_conn.get_bucket(bucket_name)
+        key = bucket.get_key(results_file_name)
+        if key:
+            # Retrieve the file with the results
+            file_name = os.path.join(results_dir, results_file_name)
+            key.get_contents_to_filename(file_name)
+            print "Found previously computed results and saved them to {0}".format(file_name)
+            # Open the results tar file
+            tfile = tarfile.open(file_name)
+            # Extract the results tar file
+            if tarfile.is_tarfile(file_name):
+                tfile.extractall(results_dir)
+                return True
+            else:
+                print "Retrieved results file is not a tar file!?"
+                return False
+        else:
+            print "No results found; need to compute results."
+            return False
+    except:
+        # Fallback to recomputing the results
+        return False
 

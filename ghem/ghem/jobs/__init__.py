@@ -7,12 +7,23 @@ log = logging.getLogger(__name__)
 class JobWrapper(object):
     def __init__(self, job_form_data):
         self.job_form_data = job_form_data
+        self.data_values = self._extract_data_values(job_form_data)
         self.user_email = self.job_form_data.get('email', None)
         self.store_user_email()
         self.command_line = None
         self.run_path = "/var/opt/IMOGEN"
         if not os.path.exists(self.run_path):
             os.mkdir(self.run_path)
+
+    def _extract_data_values(self, job_form_data):
+        """
+        Extract job input values from the from data and return a list
+        of only those data values.
+        """
+        data_values = []
+        for yr in range(10, 100, 10): # we're skipping the first decade since it's history
+            data_values.append(str(job_form_data.get('yr20{0}'.format(yr), 0)))
+        return data_values
 
     def create_data_file(self, file_path='/var/opt/IMOGEN/EMITS/user.dat'):
         """
@@ -23,11 +34,8 @@ class JobWrapper(object):
         If the value of ``file_path`` is changed from the default, must also
         change the corresponding copy line in the generated SGE script in drm.py
         """
-        values = []
-        for yr in range(10, 100, 10): # we're skipping the first decade since it's history
-            values.append(str(self.job_form_data.get('yr20{0}'.format(yr), 0)))
         with open(file_path, 'w') as f:
-            f.write('\n'.join(values))
+            f.write('\n'.join(self.data_values))
         # Make sure the input data file exists on the NFS and in the dir where
         # the models expect it
         nfs_file_path = '/mnt/transient_nfs/ghem/user.dat'

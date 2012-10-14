@@ -3,3 +3,4 @@ PyYAML==3.10
 drmaa==0.5
 gunicorn==0.14.3
 wsgiref==0.1.2
+boto>=2.5.2

@@ -5,6 +5,7 @@ also includes terminating the instance itself.
 import os
 import sys
 import yaml
+import time
 from blend.cloudman import CloudMan
 
 # Setup logging
@@ -28,5 +29,8 @@ except Exception, e:
     sys.exit(1)
 # Get a handle to CloudMan and terminate the cluster
 cm = CloudMan('http://127.0.0.1:42284/', cm_pwd)
+# Wait a bit longer before terminating to make sure any
+# actions in progress have a bit longer to complete
+time.sleep(120) 
 log.debug("Initiating termination and deletion of this cluster")
 cm.terminate(terminate_master_instance=True, delete_cluster=True)
