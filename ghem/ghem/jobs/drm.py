@@ -10,17 +10,17 @@ drm_template = """#!/bin/sh
 cd {run_path}
 
 # Use this file as a flag to indicate when this run has completed
-#FIXME: .done directory must be shared over NFS so all workers are accounted for
-# w/o a data dir, this must be /opt/sge then but that's owned by root - all
-# this runs as ubuntu...
 DONE_FILE=/mnt/transient_nfs/ghem/jobs/{id}.done
 RUNDIR=$(dirname $DONE_FILE)
 LOG_FILE="{log_dir}/{id}.log"
 
 # Make sure blend-lib is installed
 python -c "from blend.cloudman import CloudMan" || sudo pip install blend-lib
+# Stagger job starts so CloudMan gets fully initialized on multi-slot instances
+#sleep `shuf -i 1-100 -n 1`
+sleep {id}0
 # Initialize CloudMan and setup cluster size
-echo "GCM {id} calling init_cm.py script (check /mnt/transient_nfs/ghem/manipulate_cm.log)" > $LOG_FILE
+echo "[`date`] GCM {id} calling init_cm.py script (check /mnt/transient_nfs/ghem/manipulate_cm.log)" > $LOG_FILE
 python /home/ubuntu/weather/ghem/ghem/init_cm.py
 
 
@@ -30,37 +30,37 @@ if [ -f /mnt/transient_nfs/ghem/user.dat ]
 then
     cp /mnt/transient_nfs/ghem/user.dat /var/opt/IMOGEN/EMITS/user.dat
 else
-    echo "Input file /mnt/transient_nfs/ghem/user.dat not found!" >> $LOG_FILE
+    echo "[`date`] Input file /mnt/transient_nfs/ghem/user.dat not found!" >> $LOG_FILE
 fi
 
 # Test if run progress dir exists or create it
 test -d $RUNDIR || mkdir -p $RUNDIR
 
 # Invoke the model code w/ the appropriate input file
-echo "GCM {id} starting at `date`" >> $LOG_FILE
+echo "[`date`] GCM {id} starting at `date`" >> $LOG_FILE
 ./jules_fast.exe < 22GCM/{input_dir}/input.jin
 
 # Create a file indicating the model ran
-echo "GCM {id} completed at `date`" >> $LOG_FILE
+echo "[`date`] GCM {id} completed at `date`" >> $LOG_FILE
 touch $DONE_FILE
 
 # Check if all the other scripts ran. If so, generate the results
 # plot and email the plot to the user
 num_done=`ls $RUNDIR/*.done | wc -l`
 if [ $num_done -eq 22 ]; then
-    echo "GCM {id} finished last; generating the plot" >> $LOG_FILE
+    echo "[`date`] GCM {id} finished last; generating the plot" >> $LOG_FILE
     cd GRADSPLOT/
     ./test-ensemble.sh >> $LOGFILE 2>&1
 
     # Email the generated plot to the user
-    echo "GCM {id} sending the email" >> $LOG_FILE
+    echo "[`date`] GCM {id} sending the email" >> $LOG_FILE
     python /home/ubuntu/weather/ghem/ghem/send_email.py >> $LOG_FILE
 
     # Terminate the cluster
-    echo "GCM {id} initiating termination of this cluster" >> $LOG_FILE
+    echo "[`date`] GCM {id} initiating termination of this cluster" >> $LOG_FILE
     # python /home/ubuntu/weather/ghem/ghem/terminate_cm.py
 else
-    echo "GCM {id} not last; currently $num_done completed" >> $LOG_FILE
+    echo "[`date`] GCM {id} not last; currently $num_done completed" >> $LOG_FILE
 fi
 """
 
