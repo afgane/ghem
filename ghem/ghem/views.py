@@ -129,7 +129,7 @@ def run_models(request):
         # Terminate the cluster now (do this elsewhere?)
         cmd = 'python /home/ubuntu/weather/ghem/ghem/terminate_cm.py'
         print "Terminating this cluster"
-        #subprocess.call(cmd, shell=True) # TODO: Comment during dev only
+        subprocess.call(cmd, shell=True)
         return True
     else:
         # Create and subit jobs to compute the results
