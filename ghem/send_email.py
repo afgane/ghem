@@ -1,6 +1,10 @@
 import os
+import boto
 import yaml
+import hashlib
 import smtplib
+import tarfile
+import subprocess
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
@@ -60,6 +64,19 @@ def get_user_email(file_path='/mnt/transient_nfs/ghem/email.txt'):
         .format(file_path, address)
     return address
 
+def get_aws_creds():
+    """
+    Retrieve AWS account credentials from CloudMan's user data.
+    Return a tuple containing ``aws_access_key`` and ``aws_secret_key``.
+    """
+    cm_ud = {}
+    ud_file = '/tmp/cm/userData.yaml'
+    with open(ud_file) as f:
+        cm_ud = yaml.load(f)
+    aws_access_key = cm_ud.get('access_key', None)
+    aws_secret_key = cm_ud.get('secret_key', None)
+    return aws_access_key, aws_secret_key
+
 def get_ses_creds():
     """
     AWS SES uses its own set of credentials. So, have these creds saved
@@ -70,14 +87,7 @@ def get_ses_creds():
     Furthermore, this method assumes the user data is formatted to match
     user data of CloudMan (usecloudman.org).
     """
-    # Get S3 bucket creds from CloudMan's user data
-    cm_ud = {}
-    ud_file = '/tmp/cm/userData.yaml'
-    with open(ud_file) as f:
-        cm_ud = yaml.load(f)
-    aws_access_key = cm_ud.get('access_key', None)
-    aws_secret_key = cm_ud.get('secret_key', None)
-
+    aws_access_key, aws_secret_key = get_aws_creds()
     # Get the creds file from the S3 bucket
     bucket_name = 'imogen-dev'
     remote_filename = 'ses_creds.yaml'
@@ -105,18 +115,66 @@ def get_ses_creds():
     ses_pass = creds['ses_pass']
     return ses_user, ses_pass
 
+def store_computed_results(attach_files):
+    """
+    Store the ``attach_files`` as the computed results to an S3 bucket. This
+    enables the same results to be retrieved instead of having to be re-computed.
+
+    The name of the key stored in S3 is a hash based on the input values used to
+    compute the results, thus providing a uniquie mappaing between the input and
+    the results.
+    """
+    # Figure out a unique file name for the results file (based on the used input values)
+    input_values_file = '/mnt/transient_nfs/ghem/user.dat'
+    if os.path.exists(input_values_file):
+        with open(input_values_file, 'r') as f:
+            values = f.read().strip()
+        values = values.replace('\n', '_')
+        # Derive the actual file name based on the inputs hash
+        results_hash = hashlib.md5(values).hexdigest()
+        results_file_name = results_hash + '.tar.gz'
+
+        # Create a tar file with the results
+        try:
+            dir_name = None
+            file_names = []
+            for results_file in attach_files:
+                dir_name = os.path.dirname(results_file)
+                file_names.append(os.path.basename(results_file))
+            file_names_str = ' '.join(file_names)
+            p = subprocess.call("cd {0};tar -cvzf {1} {2}"\
+                .format(dir_name, results_file_name, file_names_str), shell=True)
+            computed_results_file = os.path.join(dir_name, results_file_name)
+        except Exception, e:
+            print "Error: can't find results file {0}: {1}".format(results_file, e)
+
+        # Upload the results file to S3
+        aws_access_key, aws_secret_key = get_aws_creds()
+        s3_conn = boto.connect_s3(aws_access_key, aws_secret_key)
+        bucket_name = 'imogen-dev'
+        b = s3_conn.get_bucket(bucket_name)
+        k = Key(b, results_file_name)
+        k.set_contents_from_filename(computed_results_file)
+        print "Saved results file to bucket {0} as key {1}".format(bucket_name, k.name)
+    else:
+        print "Not saving computed results because cannot find the input data "\
+              "values file {0}".format(input_values_file)
+
 ses_user, ses_pass = get_ses_creds()
-attach_files = ['/mnt/transient_nfs/ghem/csoil-2000.png',
+results_files = ['/mnt/transient_nfs/ghem/csoil-2000.png',
                 '/mnt/transient_nfs/ghem/csoil-2050.png',
                 '/mnt/transient_nfs/ghem/csoil-2099.png',
                 '/mnt/transient_nfs/ghem/npp-2000.png',
                 '/mnt/transient_nfs/ghem/npp-2050.png',
                 '/mnt/transient_nfs/ghem/npp-2099.png']
-for af in attach_files:
-    if not os.path.exists(af):
-        print "Results file {0} not found. Not attaching the file to the email."\
+attach_files = []
+for af in results_files:
+    if os.path.exists(af):
+        attach_files.append(af)
+    else:
+        print "Results file {0} not found; not including this file."\
             .format(af)
-        attach_files.remove(af)
+store_computed_results(attach_files)
 mail(to=get_user_email(),
    subject="Your IMOGEN portal results",
    text="Attached to this message are the results of the run you submitted "
