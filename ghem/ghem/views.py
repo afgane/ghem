@@ -127,20 +127,20 @@ def run_models(request):
         cmd = 'python /home/ubuntu/weather/ghem/ghem/send_email.py'
         subprocess.call(cmd, shell=True)
         # Terminate the cluster now (do this elsewhere?)
+        log.info("Initiating cluster termination")
         cmd = 'python /home/ubuntu/weather/ghem/ghem/terminate_cm.py'
-        print "Terminating this cluster"
         subprocess.call(cmd, shell=True)
         return True
     else:
         # Create and subit jobs to compute the results
         job_wrapper.create_data_file()
-        print job_wrapper.job_form_data
+        log.debug("Job form data: {0}".format(job_wrapper.job_form_data))
         # Must run emits to generate emis_co2.dat - this step is requried to
         # run the models and it's a lot simpler to have it run form here than
         # from a job manager script
         cmd = "/var/opt/IMOGEN/EMITS/emits"
         subprocess.call(cmd, shell=True)
-        print "Ran {0} program".format(cmd)
+        log.debug("Ran {0} program".format(cmd))
         # Now submit the models via the job manager
         jr = DRMAAJobRunner()
         return jr.queue_job(job_wrapper)
@@ -182,7 +182,8 @@ def _already_have_results(input_data_values, results_dir='/mnt/transient_nfs/ghe
             # Retrieve the file with the results
             file_name = os.path.join(results_dir, results_file_name)
             key.get_contents_to_filename(file_name)
-            print "Found previously computed results and saved them to {0}".format(file_name)
+            log.debug("Found previously computed results and saved them to {0}"\
+                    .format(file_name))
             # Open the results tar file
             tfile = tarfile.open(file_name)
             # Extract the results tar file
@@ -190,10 +191,10 @@ def _already_have_results(input_data_values, results_dir='/mnt/transient_nfs/ghe
                 tfile.extractall(results_dir)
                 return True
             else:
-                print "Retrieved results file is not a tar file!?"
+                log.debug("Retrieved results file is not a tar file!?")
                 return False
         else:
-            print "No results found; need to compute results."
+            log.debug("No results found; need to compute results.")
             return False
     except:
         # Fallback to recomputing the results
