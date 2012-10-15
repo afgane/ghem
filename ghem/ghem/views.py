@@ -128,8 +128,10 @@ def run_models(request):
         subprocess.call(cmd, shell=True)
         # Terminate the cluster now (do this elsewhere?)
         log.info("Initiating cluster termination")
-        cmd = 'python /home/ubuntu/weather/ghem/ghem/terminate_cm.py'
-        subprocess.call(cmd, shell=True)
+        # Wait a bit before terminating to give the web app enough time to
+        # complete the request
+        cmd = 'sleep 120;python /home/ubuntu/weather/ghem/ghem/terminate_cm.py'
+        subprocess.Popen(cmd, shell=True)
         return True
     else:
         # Create and subit jobs to compute the results
@@ -139,7 +141,7 @@ def run_models(request):
         # run the models and it's a lot simpler to have it run form here than
         # from a job manager script
         cmd = "/var/opt/IMOGEN/EMITS/emits"
-        subprocess.call(cmd, shell=True)
+        p = subprocess.call(cmd, shell=True)
         log.debug("Ran {0} program".format(cmd))
         # Now submit the models via the job manager
         jr = DRMAAJobRunner()
