@@ -33,4 +33,4 @@ cm = CloudMan('http://127.0.0.1:42284/', cm_pwd)
 # actions in progress have a bit longer to complete
 time.sleep(120) 
 log.debug("Initiating termination and deletion of this cluster")
-cm.terminate(terminate_master_instance=True, delete_cluster=True)
+#cm.terminate(terminate_master_instance=True, delete_cluster=True) # Disable auto termination during testing
