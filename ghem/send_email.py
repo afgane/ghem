@@ -161,11 +161,9 @@ def store_computed_results(attach_files):
               "values file {0}".format(input_values_file)
 
 ses_user, ses_pass = get_ses_creds()
-results_files = ['/mnt/transient_nfs/ghem/csoil-2000.png',
-                '/mnt/transient_nfs/ghem/csoil-2050.png',
+results_files = ['/mnt/transient_nfs/ghem/csoil-1861.png',
                 '/mnt/transient_nfs/ghem/csoil-2099.png',
-                '/mnt/transient_nfs/ghem/npp-2000.png',
-                '/mnt/transient_nfs/ghem/npp-2050.png',
+                '/mnt/transient_nfs/ghem/npp-1861.png',
                 '/mnt/transient_nfs/ghem/npp-2099.png']
 attach_files = []
 for af in results_files:
